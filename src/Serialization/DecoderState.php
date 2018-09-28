@@ -1,9 +1,7 @@
 <?php
 namespace Icecave\Flax\Serialization;
 
-use Eloquent\Enumeration\AbstractEnumeration;
-
-class DecoderState extends AbstractEnumeration
+class DecoderState
 {
     const BEGIN = 0;
 

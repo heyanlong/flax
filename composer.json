@@ -1,5 +1,5 @@
 {
-    "name": "icecave/flax",
+    "name": "heyanlong/flax",
     "description": "A client library for the Hessian binary web services protocol.",
     "keywords": [
         "hessian",
@@ -10,28 +10,27 @@
         "webservice",
         "api"
     ],
-    "homepage": "https://github.com/IcecaveStudios/flax",
+    "homepage": "https://github.com/heyanlong/flax",
     "license": "MIT",
     "authors": [
         {
             "name": "James Harris",
             "email": "james.harris@icecave.com.au",
             "homepage": "https://github.com/jmalloc"
+        },
+        {
+            "name": "Yanlong He",
+            "email": "yanlong.hee@gmail.com",
+            "homepage": "https://github.com/heyanlong"
         }
     ],
     "require": {
-        "php": ">=5.4",
-        "eloquent/enumeration": "~5",
-        "guzzle/http": "~3",
+        "php": ">=7.0",
+        "guzzlehttp/guzzle": "^6.3",
         "icecave/chrono": "~1",
         "icecave/collections": "~1",
         "icecave/isolator": "~3",
         "psr/log": "~1"
-    },
-    "require-dev": {
-        "eloquent/liberator": "~1",
-        "icecave/archer": "~1",
-        "icecave/parity": "~1"
     },
     "autoload": {
         "psr-4": {

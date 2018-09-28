@@ -1,7 +1,8 @@
 <?php
+
 namespace Icecave\Flax;
 
-use Guzzle\Http\Client;
+use GuzzleHttp\Client;
 
 class HessianClientFactory
 {
@@ -10,15 +11,13 @@ class HessianClientFactory
      */
     public function create($url)
     {
-        $httpClient = new Client($url);
-        $httpClient->setUserAgent(
-            sprintf('Flax/%s', PackageInfo::VERSION)
-        );
-
-        $httpClient->setDefaultOption(
-            'headers/Content-Type',
-            'x-application/hessian'
-        );
+        $httpClient = new Client([
+            'base_uri' => $url,
+            'headers' => [
+                'User-Agent' => sprintf('Flax/%s', PackageInfo::VERSION),
+                'Content-Type' => 'x-application/hessian'
+            ]
+        ]);
 
         return new HessianClient($httpClient);
     }
