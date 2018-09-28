@@ -6,7 +6,7 @@ use Icecave\Chrono\DateTime;
 use Icecave\Collections\Map;
 use Icecave\Collections\Vector;
 use Icecave\Flax\Binary;
-use Icecave\Flax\Object;
+use Icecave\Flax\UniversalObject;
 use stdClass;
 
 abstract class TestVectors
@@ -338,7 +338,7 @@ abstract class TestVectors
 
             'object - custom name' => [
                 "\x43\x07foo.bar\x92\x03bar\x03foo\x60\x92\x91",
-                new Object('foo.bar', (object) ['bar' => 2, 'foo' => 1]),
+                new UniversalObject('foo.bar', (object) ['bar' => 2, 'foo' => 1]),
             ],
         ];
 

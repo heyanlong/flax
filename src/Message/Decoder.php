@@ -24,7 +24,7 @@ class Decoder
     public function reset()
     {
         $this->serializationDecoder->reset();
-        $this->state = DecoderState::BEGIN();
+        $this->state = DecoderState::BEGIN;
         $this->buffer = '';
         $this->value = null;
     }
@@ -55,7 +55,7 @@ class Decoder
      */
     public function tryFinalize(&$value = null)
     {
-        if (DecoderState::COMPLETE() !== $this->state) {
+        if (DecoderState::COMPLETE !== $this->state) {
             return false;
         }
 
@@ -93,15 +93,15 @@ class Decoder
     private function feedByte($byte)
     {
         switch ($this->state) {
-            case DecoderState::VERSION():
+            case DecoderState::VERSION:
                 return $this->handleVersion($byte);
-            case DecoderState::MESSAGE_TYPE():
+            case DecoderState::MESSAGE_TYPE:
                 return $this->handleMessageType($byte);
-            case DecoderState::RPC_REPLY():
+            case DecoderState::RPC_REPLY:
                 return $this->handleValue($byte);
-            case DecoderState::RPC_FAULT():
+            case DecoderState::RPC_FAULT:
                 return $this->handleValue($byte);
-            case DecoderState::COMPLETE():
+            case DecoderState::COMPLETE:
                 throw new DecodeException('Decoder has not been reset.');
         }
 
@@ -109,7 +109,7 @@ class Decoder
             throw new DecodeException('Invalid byte at start of message: 0x' . dechex($byte) . ' (state: ' . $this->state . ').');
         }
 
-        $this->state = DecoderState::VERSION();
+        $this->state = DecoderState::VERSION;
     }
 
     /**
@@ -125,7 +125,7 @@ class Decoder
             return;
         } elseif ($this->buffer === HessianConstants::VERSION) {
             $this->buffer = '';
-            $this->state = DecoderState::MESSAGE_TYPE();
+            $this->state = DecoderState::MESSAGE_TYPE;
         } else {
             throw new DecodeException('Unsupported Hessian version: 0x' . bin2hex($this->buffer) . '.');
         }
@@ -139,9 +139,9 @@ class Decoder
     private function handleMessageType($byte)
     {
         if (HessianConstants::MESSAGE_TYPE_REPLY === $byte) {
-            $this->state = DecoderState::RPC_REPLY();
+            $this->state = DecoderState::RPC_REPLY;
         } elseif (HessianConstants::MESSAGE_TYPE_FAULT === $byte) {
-            $this->state = DecoderState::RPC_FAULT();
+            $this->state = DecoderState::RPC_FAULT;
         } else {
             throw new DecodeException('Unsupported message type: 0x' . dechex($byte) . '.');
         }
@@ -159,11 +159,11 @@ class Decoder
         $value = null;
         if ($this->serializationDecoder->tryFinalize($value)) {
             $this->value = [
-                $this->state === DecoderState::RPC_REPLY(),
+                $this->state === DecoderState::RPC_REPLY,
                 $value,
             ];
 
-            $this->state = DecoderState::COMPLETE();
+            $this->state = DecoderState::COMPLETE;
         }
     }
 

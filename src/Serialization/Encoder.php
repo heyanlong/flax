@@ -9,7 +9,7 @@ use Icecave\Collections\Map;
 use Icecave\Collections\SequenceInterface;
 use Icecave\Flax\Binary;
 use Icecave\Flax\Exception\EncodeException;
-use Icecave\Flax\Object;
+use Icecave\Flax\UniversalObject;
 use stdClass;
 
 class Encoder
@@ -324,7 +324,7 @@ class Encoder
             return $this->encodeBinary($value->data());
         }
 
-        if ($value instanceof Object) {
+        if ($value instanceof UniversalObject) {
             $className = $value->className();
             $value = $value->object();
         } else {

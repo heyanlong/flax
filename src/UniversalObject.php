@@ -4,7 +4,7 @@ namespace Icecave\Flax;
 /**
  * A wrapper around an object that allows you to overide the class name used during Hessian serialization.
  */
-class Object
+class UniversalObject
 {
     /**
      * @param string $className The class name to use for serialization.
