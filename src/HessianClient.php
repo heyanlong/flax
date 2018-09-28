@@ -2,8 +2,7 @@
 namespace Icecave\Flax;
 
 use Exception;
-use Guzzle\Http\ClientInterface;
-use Guzzle\Stream\PhpStreamRequestFactory;
+use GuzzleHttp\ClientInterface;
 use Icecave\Collections\Map;
 use Icecave\Flax\Exception\AbstractHessianFaultException;
 use Icecave\Flax\Exception\DecodeException;
@@ -26,14 +25,12 @@ class HessianClient implements HessianClientInterface, LoggerAwareInterface
     /**
      * @param ClientInterface              $httpClient    The HTTP client used to make the request.
      * @param LoggerInterface|null         $logger        A PSR-3 logger to log requests against, or null to disable logging.
-     * @param PhpStreamRequestFactory|null $streamFactory The stream factory used to create stream-based HTTP requests, or null to use the default.
      * @param Encoder|null                 $encoder       The Hessian message encoder, or null to use the default.
      * @param Decoder|null                 $decoder       The hessian message decoder, or null to use the default.
      */
     public function __construct(
         ClientInterface $httpClient,
         LoggerInterface $logger = null,
-        PhpStreamRequestFactory $streamFactory = null,
         Encoder $encoder = null,
         Decoder $decoder = null
     ) {
@@ -41,9 +38,6 @@ class HessianClient implements HessianClientInterface, LoggerAwareInterface
             $logger = new NullLogger();
         }
 
-        if (null === $streamFactory) {
-            $streamFactory = new PhpStreamRequestFactory();
-        }
 
         if (null === $encoder) {
             $encoder = new Encoder();
@@ -55,7 +49,6 @@ class HessianClient implements HessianClientInterface, LoggerAwareInterface
 
         $this->httpClient = $httpClient;
         $this->logger = $logger;
-        $this->streamFactory = $streamFactory;
         $this->encoder = $encoder;
         $this->decoder = $decoder;
     }
@@ -177,14 +170,11 @@ class HessianClient implements HessianClientInterface, LoggerAwareInterface
 
         $buffer  = $this->encoder->encodeVersion();
         $buffer .= $this->encoder->encodeCall($name, $arguments);
-        $request = $this->httpClient->post(null, null, $buffer);
-        $stream  = $this->streamFactory->fromRequest($request);
+        $request = $this->httpClient->post($this->httpClient->getConfig('base_uri'), ['body' => $buffer]);
 
-        while (!$stream->feof()) {
-            $this->decoder->feed(
-                $stream->read(1024)
-            );
-        }
+        $this->decoder->feed(
+            $request->getBody()->getContents()
+        );
 
         list($success, $value) = $this->decoder->finalize();
 
