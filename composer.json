@@ -12,6 +12,7 @@
     ],
     "homepage": "https://github.com/heyanlong/flax",
     "license": "MIT",
+    "minimum-stability": "stable",
     "authors": [
         {
             "name": "James Harris",
@@ -35,11 +36,6 @@
     "autoload": {
         "psr-4": {
             "Icecave\\Flax\\": "src"
-        }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-develop": "0.1.x-dev"
         }
     }
 }
